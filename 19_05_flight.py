@@ -114,7 +114,7 @@ def get_time_range(query_date, now):
 
 def clean_flight_number(flight_number_raw) -> str:
     if not flight_number_raw:
-        return "N/A"
+        return "NA"
     flight_number_raw = flight_number_raw.strip()
     if " " in flight_number_raw:
         parts = flight_number_raw.split(" ")
@@ -129,18 +129,18 @@ def clean_flight_number(flight_number_raw) -> str:
 
 def parse_flight_time(time_str, date, tz):
     if not time_str:
-        return "N/A"
+        return "NA"
     try:
         hour, minute = map(int, time_str.split(":"))
         dt = datetime.datetime.combine(date, datetime.time(hour, minute))
         return tz.localize(dt).isoformat(timespec='milliseconds')
     except Exception as e:
         print(f"Error parsing flight time '{time_str}': {e}")
-        return "N/A"
+        return "NA"
 
 def extract_times(status, scheduled_time, tz, query_date):
-    estimated_time = "N/A"
-    actual_time = "N/A"
+    estimated_time = "NA"
+    actual_time = "NA"
 
     # Get time from status if available
     status_parts = status.split()
@@ -194,8 +194,8 @@ def process_flight(flight_data, direction, airport_codes, tz, query_date):
             "scheduled_arrival_time": scheduled,
             "estimated_arrival_time": estimated,
             "actual_arrival_time": actual,
-            "status": status if status else "N/A",
-            "airline_iata_code": get_flight_iata(formatted_flight_number) if is_third_char_alphabet(formatted_flight_number) else "N/A"
+            "status": status if status else "NA",
+            "airline_iata_code": get_flight_iata(formatted_flight_number) if is_third_char_alphabet(formatted_flight_number) else "NA"
         }
     else:  # Departure
         departure_airport = "KTW"
@@ -210,8 +210,8 @@ def process_flight(flight_data, direction, airport_codes, tz, query_date):
             "scheduled_departure_time": scheduled,
             "estimated_departure_time": estimated,
             "actual_departure_time": actual,
-            "status": status if status else "N/A",
-            "airline_iata_code": get_flight_iata(formatted_flight_number) if is_third_char_alphabet(formatted_flight_number) else "N/A"
+            "status": status if status else "NA",
+            "airline_iata_code": get_flight_iata(formatted_flight_number) if is_third_char_alphabet(formatted_flight_number) else "NA"
         }
 
 
