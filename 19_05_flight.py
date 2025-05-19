@@ -15,6 +15,8 @@ def get_flights(direction_str):
         List of flight dictionaries filtered by ±12 hour window
     """
     # Validate direction
+    global warsaw_tz
+    warsaw_tz = pytz.timezone('Europe/Warsaw')
     direction = validate_direction(direction_str)
 
     # Base URL
@@ -193,7 +195,7 @@ def process_flight(flight_data, direction, airport_codes, tz, query_date):
             "estimated_arrival_time": estimated,
             "actual_arrival_time": actual,
             "status": status if status else "N/A",
-            "airline_iata_code": get_flight_iata(formatted_flight_number)
+            "airline_iata_code": get_flight_iata(formatted_flight_number) if is_third_char_alphabet(formatted_flight_number) else "N/A"
         }
     else:  # Departure
         departure_airport = "KTW"
@@ -209,7 +211,7 @@ def process_flight(flight_data, direction, airport_codes, tz, query_date):
             "estimated_departure_time": estimated,
             "actual_departure_time": actual,
             "status": status if status else "N/A",
-            "airline_iata_code": get_flight_iata(formatted_flight_number)
+            "airline_iata_code": get_flight_iata(formatted_flight_number) if is_third_char_alphabet(formatted_flight_number) else "N/A"
         }
 
 
@@ -225,8 +227,6 @@ def get_headers():
 
 
 if __name__ == "__main__":
-    warsaw_tz = pytz.timezone('Europe/Warsaw')
-    
     try:
         arrivals = get_flights("arrival")
         print(f"\nTotal Arrivals: {len(arrivals)}")
